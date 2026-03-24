@@ -30,6 +30,9 @@ Each mechanism can be enabled or disabled independently.
 
 == Changelog ==
 
+= 1.0.1 =
+* Fix: Move head comment injection to wp_head priority 1 (was 999) so the AI Agent Notice appears as the first element inside <head>.
+
 = 1.0.0 =
 * Feature A: Dynamic llms.txt generation at /llms.txt
 * Feature B: Dynamic llms-full.txt generation with expanded content
