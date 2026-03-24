@@ -62,6 +62,7 @@ class AIVM_Llms_Full {
         $args = [
             'post_type'      => $post_types,
             'post_status'    => 'publish',
+            'has_password'   => false,
             'posts_per_page' => $limit,
             'orderby'        => 'date',
             'order'          => 'DESC',
@@ -247,12 +248,20 @@ class AIVM_Llms_Full {
         int $total_chars,
         int $max_total
     ): array {
-        $lines = [];
-        $truncated = false;
+        $lines             = [];
+        $truncated         = false;
+        $excluded_raw      = $settings['excluded_urls'] ?? '';
+        $excluded_patterns = $excluded_raw !== ''
+            ? array_filter(array_map('trim', explode("\n", $excluded_raw)))
+            : [];
 
         foreach ($posts as $post) {
-            $title   = get_the_title($post->ID);
+            $title   = html_entity_decode(get_the_title($post->ID), ENT_QUOTES | ENT_HTML5);
             $url     = esc_url_raw(get_permalink($post->ID));
+
+            if ($excluded_patterns && $this->is_url_excluded($url, $excluded_patterns)) {
+                continue;
+            }
             $excerpt = get_post_field('post_excerpt', $post->ID);
 
             if ($use_markdown) {
@@ -310,5 +319,18 @@ class AIVM_Llms_Full {
             'total_chars' => $total_chars,
             'truncated'   => $truncated,
         ];
+    }
+
+    /**
+     * Check if a URL matches any of the given exclusion patterns.
+     * Supports * wildcards (fnmatch-style).
+     */
+    private function is_url_excluded(string $url, array $patterns): bool {
+        foreach ($patterns as $pattern) {
+            if (fnmatch($pattern, $url)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

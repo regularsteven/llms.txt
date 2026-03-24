@@ -26,6 +26,8 @@ require_once AIVM_PLUGIN_DIR . 'includes/class-aivm-llms-txt.php';
 require_once AIVM_PLUGIN_DIR . 'includes/class-aivm-llms-full.php';
 require_once AIVM_PLUGIN_DIR . 'includes/class-aivm-head-comment.php';
 require_once AIVM_PLUGIN_DIR . 'includes/class-aivm-alternate.php';
+require_once AIVM_PLUGIN_DIR . 'includes/class-aivm-html-to-md.php';
+require_once AIVM_PLUGIN_DIR . 'includes/class-aivm-auto-md.php';
 require_once AIVM_PLUGIN_DIR . 'includes/class-aivm-admin.php';
 
 /**
@@ -37,6 +39,7 @@ function aivm_init(): void {
     $llms_full    = new AIVM_Llms_Full();
     $head_comment = new AIVM_Head_Comment();
     $alternate    = new AIVM_Alternate();
+    $auto_md      = new AIVM_Auto_Md();
     $admin        = new AIVM_Admin();
 
     $rewrite->register();
@@ -44,6 +47,7 @@ function aivm_init(): void {
     $llms_full->register();
     $head_comment->register();
     $alternate->register();
+    $auto_md->register();
     $admin->register();
 }
 add_action('plugins_loaded', 'aivm_init');
