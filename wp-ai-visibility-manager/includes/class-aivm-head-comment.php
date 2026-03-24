@@ -20,7 +20,7 @@ class AIVM_Head_Comment {
 TPL;
 
     public function register(): void {
-        add_action('wp_head', [$this, 'inject_comment'], 999);
+        add_action('wp_head', [$this, 'inject_comment'], 1);
     }
 
     /**

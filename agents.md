@@ -57,13 +57,14 @@ feature/<name>  →  dev  →  test  →  main
 
 | Field | Value |
 |---|---|
-| Version | 1.0.0 |
+| Version | 1.0.1 |
 | Status | Complete |
-| Release | Full v1.2 spec implementation |
+| Release | Head comment priority fix |
 
 ## Release History
 
 | Version | Date | Type | Description |
 |---|---|---|---|
+| 1.0.1 | 2026-03-24 | Patch | Fix: head comment injection priority changed from 999 to 1 for immediate visibility |
 | 1.0.0 | 2026-03-24 | Major | Full v1.2 spec: all 6 features (A-F), admin UI, caching, 57 tests |
 | 0.1.0 | 2026-03-24 | Initial | Project scaffolding and tooling setup |
