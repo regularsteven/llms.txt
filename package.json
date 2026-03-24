@@ -1,6 +1,6 @@
 {
   "name": "wp-ai-visibility-manager",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "WP AI Visibility Manager - WordPress plugin for AI crawler discoverability",
   "private": true,
   "scripts": {
