@@ -1,0 +1,15 @@
+{
+  "name": "wp-ai-visibility-manager/dev",
+  "description": "Dev dependencies for WP AI Visibility Manager",
+  "require-dev": {
+    "phpunit/phpunit": "^10.0",
+    "brain/monkey": "^2.6",
+    "mockery/mockery": "^1.6"
+  },
+  "autoload": {
+    "classmap": ["wp-ai-visibility-manager/includes/"]
+  },
+  "scripts": {
+    "test": "phpunit"
+  }
+}

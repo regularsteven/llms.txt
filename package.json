@@ -1,0 +1,13 @@
+{
+  "name": "wp-ai-visibility-manager",
+  "version": "0.1.0",
+  "description": "WP AI Visibility Manager - WordPress plugin for AI crawler discoverability",
+  "private": true,
+  "scripts": {
+    "test": "composer run test",
+    "build:zip": "node scripts/build-zip.js",
+    "version:patch": "npm version patch --no-git-tag-version && node scripts/sync-version.js",
+    "version:minor": "npm version minor --no-git-tag-version && node scripts/sync-version.js",
+    "version:major": "npm version major --no-git-tag-version && node scripts/sync-version.js"
+  }
+}
