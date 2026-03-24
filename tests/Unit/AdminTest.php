@@ -46,10 +46,11 @@ class AdminTest extends TestCase {
 
     public function test_sanitize_settings_sanitizes_checkboxes(): void {
         Functions\stubs([
-            'sanitize_text_field' => function ($val) { return $val; },
-            'wp_kses_post'        => function ($val) { return $val; },
-            'sanitize_key'        => function ($val) { return $val; },
-            'absint'              => function ($val) { return abs((int) $val); },
+            'sanitize_text_field'     => function ($val) { return $val; },
+            'sanitize_textarea_field' => function ($val) { return $val; },
+            'wp_kses_post'            => function ($val) { return $val; },
+            'sanitize_key'            => function ($val) { return $val; },
+            'absint'                  => function ($val) { return abs((int) $val); },
         ]);
 
         $admin = new AIVM_Admin();
@@ -67,10 +68,11 @@ class AdminTest extends TestCase {
 
     public function test_sanitize_settings_sanitizes_text_fields(): void {
         Functions\stubs([
-            'sanitize_text_field' => function ($val) { return trim(strip_tags($val)); },
-            'wp_kses_post'        => function ($val) { return $val; },
-            'sanitize_key'        => function ($val) { return $val; },
-            'absint'              => function ($val) { return abs((int) $val); },
+            'sanitize_text_field'     => function ($val) { return trim(strip_tags($val)); },
+            'sanitize_textarea_field' => function ($val) { return $val; },
+            'wp_kses_post'            => function ($val) { return $val; },
+            'sanitize_key'            => function ($val) { return $val; },
+            'absint'                  => function ($val) { return abs((int) $val); },
         ]);
 
         $admin = new AIVM_Admin();
@@ -88,10 +90,11 @@ class AdminTest extends TestCase {
 
     public function test_sanitize_settings_sanitizes_numeric_fields(): void {
         Functions\stubs([
-            'sanitize_text_field' => function ($val) { return $val; },
-            'wp_kses_post'        => function ($val) { return $val; },
-            'sanitize_key'        => function ($val) { return $val; },
-            'absint'              => function ($val) { return abs((int) $val); },
+            'sanitize_text_field'     => function ($val) { return $val; },
+            'sanitize_textarea_field' => function ($val) { return $val; },
+            'wp_kses_post'            => function ($val) { return $val; },
+            'sanitize_key'            => function ($val) { return $val; },
+            'absint'                  => function ($val) { return abs((int) $val); },
         ]);
 
         $admin = new AIVM_Admin();
@@ -111,10 +114,11 @@ class AdminTest extends TestCase {
 
     public function test_sanitize_settings_sanitizes_post_types_array(): void {
         Functions\stubs([
-            'sanitize_text_field' => function ($val) { return $val; },
-            'wp_kses_post'        => function ($val) { return $val; },
-            'sanitize_key'        => function ($val) { return strtolower(preg_replace('/[^a-zA-Z0-9_\-]/', '', $val)); },
-            'absint'              => function ($val) { return abs((int) $val); },
+            'sanitize_text_field'     => function ($val) { return $val; },
+            'sanitize_textarea_field' => function ($val) { return $val; },
+            'wp_kses_post'            => function ($val) { return $val; },
+            'sanitize_key'            => function ($val) { return strtolower(preg_replace('/[^a-zA-Z0-9_\-]/', '', $val)); },
+            'absint'                  => function ($val) { return abs((int) $val); },
         ]);
 
         $admin = new AIVM_Admin();

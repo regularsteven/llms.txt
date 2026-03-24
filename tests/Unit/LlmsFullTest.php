@@ -266,4 +266,66 @@ class LlmsFullTest extends TestCase {
 
         $this->assertSame(['post'], $effective_types);
     }
+
+    public function test_generate_decodes_html_entities_in_titles(): void {
+        Functions\stubs([
+            'get_bloginfo'      => 'Test Site',
+            'home_url'          => 'https://example.com/',
+            'wp_strip_all_tags' => function (string $text) { return strip_tags($text); },
+            'esc_url_raw'       => function (string $url) { return $url; },
+            'add_query_arg'     => function ($key, $val, $url) {
+                return $url . '?' . $key . '=' . $val;
+            },
+            'get_the_title'          => function ($id) { return 'Venue &#038; Parties'; },
+            'get_permalink'          => function ($id) { return 'https://example.com/venue/'; },
+            'get_post_field'         => function ($field, $id) { return ''; },
+            'get_post_thumbnail_id'  => 0,
+            'get_post_meta'          => '',
+        ]);
+
+        $posts = [(object) ['ID' => 1, 'post_type' => 'page']];
+
+        $generator = new AIVM_Llms_Full();
+        $output = $generator->generate($this->default_settings(), $posts, 200, 0);
+
+        $this->assertStringContainsString('[Venue & Parties]', $output);
+        $this->assertStringNotContainsString('&#038;', $output);
+    }
+
+    public function test_generate_excludes_urls_matching_wildcard_pattern(): void {
+        Functions\stubs([
+            'get_bloginfo'      => 'Test Site',
+            'home_url'          => 'https://example.com/',
+            'wp_strip_all_tags' => function (string $text) { return strip_tags($text); },
+            'esc_url_raw'       => function (string $url) { return $url; },
+            'add_query_arg'     => function ($key, $val, $url) {
+                return $url . '?' . $key . '=' . $val;
+            },
+            'get_the_title'     => function ($id) {
+                return $id === 1 ? 'Account Page' : 'Normal Page';
+            },
+            'get_permalink'     => function ($id) {
+                return $id === 1
+                    ? 'https://example.com/my-account/orders/'
+                    : 'https://example.com/about/';
+            },
+            'get_post_field'         => function ($field, $id) { return ''; },
+            'get_post_thumbnail_id'  => 0,
+            'get_post_meta'          => '',
+        ]);
+
+        $posts = [
+            (object) ['ID' => 1, 'post_type' => 'page'],
+            (object) ['ID' => 2, 'post_type' => 'page'],
+        ];
+
+        $settings = $this->default_settings();
+        $settings['excluded_urls'] = '*/my-account/*';
+
+        $generator = new AIVM_Llms_Full();
+        $output = $generator->generate($settings, $posts, 200, 0);
+
+        $this->assertStringNotContainsString('Account Page', $output);
+        $this->assertStringContainsString('Normal Page', $output);
+    }
 }

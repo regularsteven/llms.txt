@@ -84,6 +84,7 @@ class AIVM_Admin {
             'enable_head_comment',
             'enable_markdown_endpoint',
             'enable_alternate_signals',
+            'enable_auto_md',
             'show_preferred_format',
             'show_last_updated',
             'llms_full_inherit_post_types',
@@ -104,6 +105,9 @@ class AIVM_Admin {
         foreach ($text_fields as $key) {
             $sanitized[$key] = sanitize_text_field($input[$key] ?? '');
         }
+
+        // URL exclusion textarea (one pattern per line — plain text, no HTML).
+        $sanitized['excluded_urls'] = sanitize_textarea_field($input['excluded_urls'] ?? '');
 
         // Textareas (preserved with wp_kses_post for Markdown).
         $textarea_fields = [
@@ -168,12 +172,14 @@ class AIVM_Admin {
             'enable_head_comment'          => true,
             'enable_markdown_endpoint'     => true,
             'enable_alternate_signals'     => true,
+            'enable_auto_md'               => false,
             'show_preferred_format'        => true,
             'show_last_updated'            => true,
             'site_title_override'          => '',
             'site_description'             => '',
             'body_text'                    => '',
             'notes_section'                => '',
+            'excluded_urls'                => '',
             'head_comment_body'            => AIVM_Head_Comment::DEFAULT_TEMPLATE,
             'post_types'                   => ['post', 'page'],
             'markdown_param_key'           => 'format',
@@ -305,6 +311,14 @@ class AIVM_Admin {
                                     <?php echo esc_html($pt->label); ?>
                                 </label><br>
                             <?php endforeach; ?>
+                        </td>
+                    </tr>
+                    <tr class="aivm-section-a">
+                        <th scope="row"><label for="aivm-excluded-urls"><?php esc_html_e('URL Exclusions', 'wp-aivm'); ?></label></th>
+                        <td>
+                            <textarea id="aivm-excluded-urls" name="<?php echo esc_attr(self::OPTION_KEY); ?>[excluded_urls]" rows="5" class="large-text code" <?php disabled(!$settings['enable_llms_txt']); ?>><?php echo esc_textarea($settings['excluded_urls']); ?></textarea>
+                            <?php if (!$settings['enable_llms_txt']) : ?><input type="hidden" name="<?php echo esc_attr(self::OPTION_KEY); ?>[excluded_urls]" value="<?php echo esc_attr($settings['excluded_urls']); ?>"><?php endif; ?>
+                            <p class="description"><?php esc_html_e('One URL pattern per line. Use * as a wildcard. Example: */my-account/* excludes any URL containing /my-account/. Applied to both llms.txt and llms-full.txt.', 'wp-aivm'); ?></p>
                         </td>
                     </tr>
                     <tr class="aivm-section-a">
@@ -475,6 +489,23 @@ class AIVM_Admin {
                 <?php wp_nonce_field(self::FLUSH_NONCE); ?>
                 <?php submit_button(__('Flush Cache', 'wp-aivm'), 'secondary'); ?>
             </form>
+
+            <!-- Section F: Auto Markdown Generation -->
+            <h2><?php esc_html_e('Auto Markdown Generation', 'wp-aivm'); ?></h2>
+            <p><?php esc_html_e('When enabled, the plugin intercepts requests with the configured Markdown parameter and serves its own Markdown conversion of the post content — no theme support required. Works on all singular posts and pages.', 'wp-aivm'); ?></p>
+
+            <table class="form-table">
+                <tr>
+                    <th scope="row"><?php esc_html_e('Enable Auto MD', 'wp-aivm'); ?></th>
+                    <td>
+                        <label>
+                            <input type="checkbox" name="<?php echo esc_attr(self::OPTION_KEY); ?>[enable_auto_md]" value="1" <?php checked($settings['enable_auto_md']); ?>>
+                            <?php esc_html_e('Generate and serve Markdown directly from the plugin', 'wp-aivm'); ?>
+                        </label>
+                        <p class="description"><?php esc_html_e('Tip: set the Markdown Parameter Value above to "md" to use clean ?format=md URLs when Auto MD is enabled.', 'wp-aivm'); ?></p>
+                    </td>
+                </tr>
+            </table>
 
             <!-- Robots.txt guidance -->
             <div class="aivm-guidance-box">
