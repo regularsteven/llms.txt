@@ -45,6 +45,7 @@ class AIVM_Llms_Txt {
         $args = [
             'post_type'      => $post_types,
             'post_status'    => 'publish',
+            'has_password'   => false,
             'posts_per_page' => -1,
             'orderby'        => 'date',
             'order'          => 'DESC',
@@ -191,15 +192,23 @@ class AIVM_Llms_Txt {
      * @return string[]
      */
     private function format_entries(array $posts, array $settings): array {
-        $lines = [];
-        $use_markdown = !empty($settings['enable_markdown_endpoint']);
-        $param_key    = $settings['markdown_param_key'] ?? 'format';
-        $param_value  = $settings['markdown_param_value'] ?? 'markdown';
+        $lines            = [];
+        $use_markdown     = !empty($settings['enable_markdown_endpoint']);
+        $param_key        = $settings['markdown_param_key'] ?? 'format';
+        $param_value      = $settings['markdown_param_value'] ?? 'markdown';
+        $excluded_raw     = $settings['excluded_urls'] ?? '';
+        $excluded_patterns = $excluded_raw !== ''
+            ? array_filter(array_map('trim', explode("\n", $excluded_raw)))
+            : [];
 
         foreach ($posts as $post) {
-            $title   = get_the_title($post->ID);
+            $title   = html_entity_decode(get_the_title($post->ID), ENT_QUOTES | ENT_HTML5);
             $url     = esc_url_raw(get_permalink($post->ID));
             $excerpt = get_post_field('post_excerpt', $post->ID);
+
+            if ($excluded_patterns && $this->is_url_excluded($url, $excluded_patterns)) {
+                continue;
+            }
 
             if ($use_markdown) {
                 $url = add_query_arg($param_key, $param_value, $url);
@@ -214,5 +223,18 @@ class AIVM_Llms_Txt {
         }
 
         return $lines;
+    }
+
+    /**
+     * Check if a URL matches any of the given exclusion patterns.
+     * Supports * wildcards (fnmatch-style).
+     */
+    private function is_url_excluded(string $url, array $patterns): bool {
+        foreach ($patterns as $pattern) {
+            if (fnmatch($pattern, $url)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
