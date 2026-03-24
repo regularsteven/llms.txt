@@ -335,6 +335,65 @@ class AIVM_Admin {
                     </tr>
                 </table>
 
+                <!-- Section B: llms-full.txt Settings -->
+                <h2><?php esc_html_e('llms-full.txt Settings', 'wp-aivm'); ?></h2>
+                <p><?php esc_html_e('Serve an expanded version of the index with content snippets for each entry. Useful for AI systems that want a preview before fetching full pages.', 'wp-aivm'); ?></p>
+
+                <table class="form-table">
+                    <tr>
+                        <th scope="row"><?php esc_html_e('Enable llms-full.txt', 'wp-aivm'); ?></th>
+                        <td>
+                            <label>
+                                <input type="checkbox" name="<?php echo esc_attr(self::OPTION_KEY); ?>[enable_llms_full]" value="1" <?php checked($settings['enable_llms_full']); ?> class="aivm-master-toggle" data-section="aivm-section-b">
+                                <?php esc_html_e('Serve llms-full.txt at /llms-full.txt', 'wp-aivm'); ?>
+                            </label>
+                        </td>
+                    </tr>
+                    <tr class="aivm-section-b">
+                        <th scope="row"><?php esc_html_e('Inherit Post Types from llms.txt', 'wp-aivm'); ?></th>
+                        <td>
+                            <label>
+                                <input type="checkbox" name="<?php echo esc_attr(self::OPTION_KEY); ?>[llms_full_inherit_post_types]" value="1" <?php checked($settings['llms_full_inherit_post_types']); ?> <?php disabled(!$settings['enable_llms_full']); ?>>
+                                <?php esc_html_e('Use the same post types as llms.txt', 'wp-aivm'); ?>
+                            </label>
+                            <?php if (!$settings['enable_llms_full']) : ?><input type="hidden" name="<?php echo esc_attr(self::OPTION_KEY); ?>[llms_full_inherit_post_types]" value="<?php echo esc_attr($settings['llms_full_inherit_post_types']); ?>"><?php endif; ?>
+                        </td>
+                    </tr>
+                    <tr class="aivm-section-b">
+                        <th scope="row"><label for="aivm-full-truncation"><?php esc_html_e('Content Truncation Limit', 'wp-aivm'); ?></label></th>
+                        <td>
+                            <input type="number" id="aivm-full-truncation" name="<?php echo esc_attr(self::OPTION_KEY); ?>[llms_full_truncation]" value="<?php echo esc_attr($settings['llms_full_truncation']); ?>" min="50" class="small-text" <?php disabled(!$settings['enable_llms_full']); ?>>
+                            <p class="description"><?php esc_html_e('Characters per entry.', 'wp-aivm'); ?></p>
+                            <?php if (!$settings['enable_llms_full']) : ?><input type="hidden" name="<?php echo esc_attr(self::OPTION_KEY); ?>[llms_full_truncation]" value="<?php echo esc_attr($settings['llms_full_truncation']); ?>"><?php endif; ?>
+                        </td>
+                    </tr>
+                    <tr class="aivm-section-b">
+                        <th scope="row"><label for="aivm-full-max-posts"><?php esc_html_e('Maximum Posts', 'wp-aivm'); ?></label></th>
+                        <td>
+                            <input type="number" id="aivm-full-max-posts" name="<?php echo esc_attr(self::OPTION_KEY); ?>[llms_full_max_posts]" value="<?php echo esc_attr($settings['llms_full_max_posts']); ?>" min="1" class="small-text" <?php disabled(!$settings['enable_llms_full']); ?>>
+                            <?php if (!$settings['enable_llms_full']) : ?><input type="hidden" name="<?php echo esc_attr(self::OPTION_KEY); ?>[llms_full_max_posts]" value="<?php echo esc_attr($settings['llms_full_max_posts']); ?>"><?php endif; ?>
+                        </td>
+                    </tr>
+                    <tr class="aivm-section-b">
+                        <th scope="row"><label for="aivm-full-recency"><?php esc_html_e('Limit to posts from last N days', 'wp-aivm'); ?></label></th>
+                        <td>
+                            <input type="number" id="aivm-full-recency" name="<?php echo esc_attr(self::OPTION_KEY); ?>[llms_full_recency_days]" value="<?php echo esc_attr($settings['llms_full_recency_days']); ?>" min="0" class="small-text" <?php disabled(!$settings['enable_llms_full']); ?>>
+                            <p class="description"><?php esc_html_e('0 = no date filter applied.', 'wp-aivm'); ?></p>
+                            <?php if (!$settings['enable_llms_full']) : ?><input type="hidden" name="<?php echo esc_attr(self::OPTION_KEY); ?>[llms_full_recency_days]" value="<?php echo esc_attr($settings['llms_full_recency_days']); ?>"><?php endif; ?>
+                        </td>
+                    </tr>
+                    <tr class="aivm-section-b">
+                        <th scope="row"><?php esc_html_e('Include Featured Image Alt Text', 'wp-aivm'); ?></th>
+                        <td>
+                            <label>
+                                <input type="checkbox" name="<?php echo esc_attr(self::OPTION_KEY); ?>[llms_full_include_alt_text]" value="1" <?php checked($settings['llms_full_include_alt_text']); ?> <?php disabled(!$settings['enable_llms_full']); ?>>
+                                <?php esc_html_e('Append featured image alt text to each entry', 'wp-aivm'); ?>
+                            </label>
+                            <?php if (!$settings['enable_llms_full']) : ?><input type="hidden" name="<?php echo esc_attr(self::OPTION_KEY); ?>[llms_full_include_alt_text]" value="<?php echo esc_attr($settings['llms_full_include_alt_text']); ?>"><?php endif; ?>
+                        </td>
+                    </tr>
+                </table>
+
                 <!-- Section C: HTML Head Comment Settings -->
                 <h2><?php esc_html_e('HTML Head Comment', 'wp-aivm'); ?></h2>
                 <p><?php esc_html_e('Inject a comment block into the HTML <head> on all public pages. AI agents that parse HTML will see this immediately.', 'wp-aivm'); ?></p>
