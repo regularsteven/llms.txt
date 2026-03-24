@@ -363,6 +363,50 @@ class AIVM_Admin {
                     </tr>
                 </table>
 
+                <!-- Section D+E: Markdown Endpoint & Alternate Signals -->
+                <h2><?php esc_html_e('Markdown Endpoint & Alternate Format Signals', 'wp-aivm'); ?></h2>
+                <p><?php esc_html_e('Control how the plugin advertises Markdown versions of your content. The endpoint parameter is appended to URLs in llms.txt and llms-full.txt. The alternate signals inject a <link> tag and HTTP header on individual posts and pages.', 'wp-aivm'); ?></p>
+
+                <table class="form-table">
+                    <tr>
+                        <th scope="row"><?php esc_html_e('Advertise Markdown Endpoint', 'wp-aivm'); ?></th>
+                        <td>
+                            <label>
+                                <input type="checkbox" name="<?php echo esc_attr(self::OPTION_KEY); ?>[enable_markdown_endpoint]" value="1" <?php checked($settings['enable_markdown_endpoint']); ?> class="aivm-master-toggle" data-section="aivm-section-de">
+                                <?php esc_html_e('Append Markdown parameter to URLs in llms.txt files', 'wp-aivm'); ?>
+                            </label>
+                        </td>
+                    </tr>
+                    <tr class="aivm-section-de">
+                        <th scope="row"><label for="aivm-param-key"><?php esc_html_e('Markdown Parameter Key', 'wp-aivm'); ?></label></th>
+                        <td>
+                            <input type="text" id="aivm-param-key" name="<?php echo esc_attr(self::OPTION_KEY); ?>[markdown_param_key]" value="<?php echo esc_attr($settings['markdown_param_key']); ?>" class="regular-text" <?php disabled(!$settings['enable_markdown_endpoint']); ?>>
+                            <?php if (!$settings['enable_markdown_endpoint']) : ?><input type="hidden" name="<?php echo esc_attr(self::OPTION_KEY); ?>[markdown_param_key]" value="<?php echo esc_attr($settings['markdown_param_key']); ?>"><?php endif; ?>
+                        </td>
+                    </tr>
+                    <tr class="aivm-section-de">
+                        <th scope="row"><label for="aivm-param-value"><?php esc_html_e('Markdown Parameter Value', 'wp-aivm'); ?></label></th>
+                        <td>
+                            <input type="text" id="aivm-param-value" name="<?php echo esc_attr(self::OPTION_KEY); ?>[markdown_param_value]" value="<?php echo esc_attr($settings['markdown_param_value']); ?>" class="regular-text" <?php disabled(!$settings['enable_markdown_endpoint']); ?>>
+                            <?php if (!$settings['enable_markdown_endpoint']) : ?><input type="hidden" name="<?php echo esc_attr(self::OPTION_KEY); ?>[markdown_param_value]" value="<?php echo esc_attr($settings['markdown_param_value']); ?>"><?php endif; ?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row"><?php esc_html_e('Enable Alternate Format Signals', 'wp-aivm'); ?></th>
+                        <td>
+                            <label>
+                                <input type="checkbox" name="<?php echo esc_attr(self::OPTION_KEY); ?>[enable_alternate_signals]" value="1" <?php checked($settings['enable_alternate_signals']); ?>>
+                                <?php esc_html_e('Inject <link rel="alternate"> tag and HTTP Link header on singular pages', 'wp-aivm'); ?>
+                            </label>
+                        </td>
+                    </tr>
+                </table>
+
+                <div class="aivm-guidance-box">
+                    <p><strong><?php esc_html_e('Markdown endpoint quality guidance', 'wp-aivm'); ?></strong></p>
+                    <p><?php esc_html_e('For best AI compatibility, your Markdown endpoint should: remove navigation, ads, and boilerplate; use a clear heading hierarchy (H1–H3); preserve semantic structure; avoid inline scripts or styles; and return consistent structure across all pages. The signals this plugin emits are only as useful as the quality of the endpoint they point to.', 'wp-aivm'); ?></p>
+                </div>
+
                 <?php submit_button(__('Save Settings', 'wp-aivm')); ?>
             </form>
 
