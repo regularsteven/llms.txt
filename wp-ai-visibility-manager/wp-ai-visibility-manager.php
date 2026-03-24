@@ -3,7 +3,7 @@
  * Plugin Name:       WP AI Visibility Manager
  * Plugin URI:        https://github.com/stevenwright/wp-ai-visibility-manager
  * Description:       Helps AI systems discover your content via llms.txt, head comments, link tags, and HTTP headers.
- * Version:           1.0.0
+ * Version:           1.0.1
  * Requires at least: 6.2
  * Requires PHP:      8.0
  * Author:            Steven Wright
@@ -16,7 +16,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('AIVM_VERSION', '1.0.0');
+define('AIVM_VERSION', '1.0.1');
 define('AIVM_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('AIVM_PLUGIN_URL', plugin_dir_url(__FILE__));
 
