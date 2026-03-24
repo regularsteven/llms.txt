@@ -57,12 +57,13 @@ feature/<name>  →  dev  →  test  →  main
 
 | Field | Value |
 |---|---|
-| Version | 0.1.0 |
-| Status | Scaffolding |
-| Release | Initial project structure |
+| Version | 1.0.0 |
+| Status | Complete |
+| Release | Full v1.2 spec implementation |
 
 ## Release History
 
 | Version | Date | Type | Description |
 |---|---|---|---|
+| 1.0.0 | 2026-03-24 | Major | Full v1.2 spec: all 6 features (A-F), admin UI, caching, 57 tests |
 | 0.1.0 | 2026-03-24 | Initial | Project scaffolding and tooling setup |

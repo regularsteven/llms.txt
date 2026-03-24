@@ -30,5 +30,17 @@ Each mechanism can be enabled or disabled independently.
 
 == Changelog ==
 
+= 1.0.0 =
+* Feature A: Dynamic llms.txt generation at /llms.txt
+* Feature B: Dynamic llms-full.txt generation with expanded content
+* Feature C: HTML head comment injection for AI agents
+* Feature D: Configurable Markdown endpoint advertisement
+* Feature E: <link rel="alternate" type="text/markdown"> injection on singular pages
+* Feature F: HTTP Link response header on singular pages
+* Admin settings page under Tools > AI Visibility
+* Transient caching with automatic invalidation
+* Physical file conflict detection
+* Full spec compliance with llmstxt.org
+
 = 0.1.0 =
 * Initial scaffolding release.
