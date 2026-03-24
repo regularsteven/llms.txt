@@ -15,13 +15,16 @@ WordPress plugin for AI crawler discoverability. Standalone dev environment (not
 - `npm run version:patch|minor|major` — bump version and sync to PHP header + readme.txt
 - `composer test` — run PHPUnit directly
 
-## Git Workflow
+## Git Workflow — MANDATORY, NO EXCEPTIONS
 - `main` — production releases only
 - `test` — tested features ready for release
 - `dev` — integration branch
 - `feature/<name>` — feature branches (created from `dev`)
 - Flow: `feature/<name>` → `dev` → `test` → `main`
-- Never commit directly to `main` or `test`
+- **NEVER commit directly to `main`, `test`, or `dev`**
+- Always start with: `git checkout dev && git checkout -b feature/<name>`
+- Merge order: feature → dev (run tests) → test → main → bump version → tag
+- See `agents.md` for the full step-by-step release protocol
 
 ## Architecture
 - All plugin code in `wp-ai-visibility-manager/` directory

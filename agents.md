@@ -53,18 +53,38 @@ feature/<name>  →  dev  →  test  →  main
 - `test`: QA branch — only stable dev merges go here
 - `main`: Production releases only — tagged versions
 
+## ⚠️ Critical Workflow Reminder for Agents
+
+**NEVER commit directly to `main`, `test`, or `dev`.** The required flow is:
+
+```
+git checkout dev
+git checkout -b feature/<name>
+# ... do work, commit on feature branch ...
+git checkout dev && git merge feature/<name> --no-ff
+npm test   # must pass before proceeding
+git checkout test && git merge dev --no-ff
+git checkout main && git merge test --no-ff
+npm run version:minor   # or patch/major
+git add ... && git commit -m "Bump version to X.Y.Z"
+git tag vX.Y.Z
+```
+
+A previous agent session (v1.1.0 feature work) committed directly to `main` and had to be rescued via stash → feature branch after the fact. Do not repeat this.
+
 ## Current Release
 
 | Field | Value |
 |---|---|
-| Version | 1.0.1 |
+| Version | 1.1.0 |
 | Status | Complete |
-| Release | Head comment priority fix |
+| Release | URL exclusion, protected posts, entity decoding, Auto MD |
 
 ## Release History
 
 | Version | Date | Type | Description |
 |---|---|---|---|
+| 1.1.0 | 2026-03-24 | Minor | URL exclusion (wildcards), protected post filtering, HTML entity decoding, plugin-generated Auto MD, HTML→Markdown converter |
 | 1.0.1 | 2026-03-24 | Patch | Fix: head comment injection priority changed from 999 to 1 for immediate visibility |
 | 1.0.0 | 2026-03-24 | Major | Full v1.2 spec: all 6 features (A-F), admin UI, caching, 57 tests |
 | 0.1.0 | 2026-03-24 | Initial | Project scaffolding and tooling setup |
